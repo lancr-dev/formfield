@@ -42,82 +42,175 @@
     );
   }
 
+  function initTheme() {
+    const root = document.documentElement;
+    const buttons = [...document.querySelectorAll('[data-theme-toggle]')];
+    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    const storageKey = 'form-and-field-theme';
+    let preference = null;
+
+    function validTheme(value) {
+      return value === 'dark' || value === 'light' ? value : null;
+    }
+
+    try {
+      preference = validTheme(window.localStorage.getItem(storageKey));
+    } catch {
+      preference = null;
+    }
+
+    function applyTheme() {
+      const theme = preference || (systemTheme.matches ? 'dark' : 'light');
+      root.dataset.theme = theme;
+      for (const button of buttons) {
+        button.setAttribute('aria-pressed', String(theme === 'dark'));
+        button.title =
+          theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+      }
+      if (themeColor) {
+        themeColor.content = theme === 'dark' ? '#101a15' : '#f7f5ec';
+      }
+    }
+
+    for (const button of buttons) {
+      button.addEventListener('click', () => {
+        preference = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        applyTheme();
+        try {
+          window.localStorage.setItem(storageKey, preference);
+        } catch {
+          return;
+        }
+      });
+      button.hidden = false;
+    }
+
+    systemTheme.addEventListener('change', () => {
+      if (!preference) applyTheme();
+    });
+    window.addEventListener('storage', (event) => {
+      if (event.key === storageKey || event.key === null) {
+        preference = validTheme(event.newValue);
+        applyTheme();
+      }
+    });
+    applyTheme();
+  }
+
   function initNavigation() {
     const toggle = document.querySelector('[data-menu-toggle]');
     const navigation = document.getElementById('primary-navigation');
-    if (!toggle || !navigation) return;
+    const sidebar = document.getElementById('mobile-navigation');
+    const closeButton = document.querySelector('[data-menu-close]');
+    const header = document.querySelector('.site-header');
+    if (!toggle || !navigation || !sidebar || !closeButton || !header) return;
 
     const menuLabel = toggle.querySelector('[data-menu-label]');
     const mobileViewport = window.matchMedia('(max-width: 55.999rem)');
     const links = [...navigation.querySelectorAll('a[href^="#"]')];
+    const navigationHome = navigation.parentElement;
+    let restoreMenuFocus = false;
 
-    function setMenuOpen(open) {
-      toggle.setAttribute('aria-expanded', String(open));
-      if (menuLabel) menuLabel.textContent = open ? 'Close' : 'Menu';
+    function syncMenuState() {
+      toggle.setAttribute('aria-expanded', String(sidebar.open));
+      if (menuLabel) menuLabel.textContent = sidebar.open ? 'Close' : 'Menu';
+      document.documentElement.classList.toggle('sidebar-open', sidebar.open);
     }
 
-    function isMenuOpen() {
+    function closeSidebar(restoreFocus = true) {
+      if (!sidebar.open) return;
+      restoreMenuFocus = restoreFocus;
+      sidebar.close();
+      syncMenuState();
+    }
+
+    toggle.addEventListener('click', () => {
+      if (!mobileViewport.matches) return;
+      if (sidebar.open) {
+        closeSidebar();
+      } else {
+        restoreMenuFocus = false;
+        sidebar.showModal();
+        syncMenuState();
+      }
+    });
+
+    closeButton.addEventListener('click', () => closeSidebar());
+    sidebar.addEventListener('cancel', (event) => {
+      event.preventDefault();
+      closeSidebar();
+    });
+    sidebar.addEventListener('close', () => {
+      if (sidebar.open) return;
+      syncMenuState();
+      if (restoreMenuFocus && mobileViewport.matches) {
+        toggle.focus({ preventScroll: true });
+      }
+      restoreMenuFocus = false;
+    });
+
+    let pointerStartedOutside = false;
+    function isOutsideSidebar(event) {
+      const bounds = sidebar.getBoundingClientRect();
       return (
-        mobileViewport.matches &&
-        toggle.getAttribute('aria-expanded') === 'true'
+        event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom
       );
     }
-
-    toggle.addEventListener('click', () => setMenuOpen(!isMenuOpen()));
+    sidebar.addEventListener('pointerdown', (event) => {
+      pointerStartedOutside =
+        event.target === sidebar && isOutsideSidebar(event);
+    });
+    sidebar.addEventListener('click', (event) => {
+      if (
+        pointerStartedOutside &&
+        event.target === sidebar &&
+        isOutsideSidebar(event)
+      ) {
+        closeSidebar();
+      }
+      pointerStartedOutside = false;
+    });
 
     navigation.addEventListener('click', (event) => {
       const link = event.target.closest('a[href^="#"]');
       if (!link || !isPlainClick(event)) return;
 
       const destination = document.getElementById(link.hash.slice(1));
-      if (isMenuOpen()) {
-        setMenuOpen(false);
+      if (sidebar.open) {
+        closeSidebar(false);
         if (destination) focusSection(destination);
       }
     });
 
-    document.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape' || !isMenuOpen()) return;
-      event.preventDefault();
-      setMenuOpen(false);
-      toggle.focus({ preventScroll: true });
-    });
+    function placeNavigation() {
+      const focused = document.activeElement;
+      const focusInNavigation = navigation.contains(focused);
+      const focusInSidebar = sidebar.contains(focused);
+      closeSidebar(false);
 
-    document.addEventListener('click', (event) => {
-      if (
-        !isMenuOpen() ||
-        navigation.contains(event.target) ||
-        toggle.contains(event.target)
-      )
-        return;
-      const focusWasInside = navigation.contains(document.activeElement);
-      setMenuOpen(false);
-      if (focusWasInside) toggle.focus({ preventScroll: true });
-    });
-
-    document.addEventListener('focusin', (event) => {
-      if (
-        isMenuOpen() &&
-        !navigation.contains(event.target) &&
-        !toggle.contains(event.target)
-      ) {
-        setMenuOpen(false);
+      if (mobileViewport.matches) {
+        sidebar.append(navigation);
+        if (focusInNavigation) toggle.focus({ preventScroll: true });
+      } else {
+        navigationHome.append(navigation);
+        if (focusInNavigation) {
+          focused.focus({ preventScroll: true });
+        } else if (focusInSidebar || focused === toggle) {
+          links[0]?.focus({ preventScroll: true });
+        }
       }
-    });
+      syncMenuState();
+    }
 
-    mobileViewport.addEventListener('change', () => {
-      setMenuOpen(
-        mobileViewport.matches && navigation.contains(document.activeElement),
-      );
-      if (!mobileViewport.matches && document.activeElement === toggle) {
-        links[0]?.focus({ preventScroll: true });
-      }
-    });
-
-    setMenuOpen(
-      mobileViewport.matches && navigation.contains(document.activeElement),
-    );
-    toggle.hidden = false;
+    if (typeof sidebar.showModal === 'function') {
+      toggle.hidden = false;
+      placeNavigation();
+      mobileViewport.addEventListener('change', placeNavigation);
+    }
 
     const sections = [...document.querySelectorAll('main > section[id]')];
     let currentSection;
@@ -125,7 +218,10 @@
 
     function updateCurrentSection() {
       framePending = false;
-      const readingLine = Math.min(window.innerHeight * 0.25, 200);
+      const readingLine = Math.max(
+        header.getBoundingClientRect().height + 16,
+        Math.min(window.innerHeight * 0.25, 200),
+      );
       let sectionId = sections[0]?.id;
 
       for (const section of sections) {
@@ -154,6 +250,19 @@
     window.addEventListener('resize', scheduleSectionUpdate);
     window.addEventListener('pageshow', scheduleSectionUpdate);
     document.addEventListener('toggle', scheduleSectionUpdate, true);
+    function updateHeaderHeight() {
+      document.documentElement.style.setProperty(
+        '--header-height',
+        `${Math.ceil(header.getBoundingClientRect().height)}px`,
+      );
+      scheduleSectionUpdate();
+    }
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(updateHeaderHeight).observe(header);
+    } else {
+      window.addEventListener('resize', updateHeaderHeight);
+    }
+    updateHeaderHeight();
     updateCurrentSection();
   }
 
@@ -478,6 +587,7 @@
     return syncDirection;
   }
 
+  initTheme();
   initNavigation();
   initGallery();
   const syncBriefDirection = initProjectBrief();

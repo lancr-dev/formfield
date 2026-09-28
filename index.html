@@ -34,7 +34,8 @@
           class="menu-toggle"
           type="button"
           aria-expanded="false"
-          aria-controls="primary-navigation"
+          aria-controls="mobile-navigation"
+          aria-haspopup="dialog"
           data-menu-toggle
           hidden
         >
@@ -50,12 +51,63 @@
           <a href="#about">The idea</a>
           <a href="#explore">Explore</a>
           <a href="#playground">Playground</a>
+          <button
+            class="theme-toggle"
+            type="button"
+            aria-pressed="false"
+            data-theme-toggle
+            hidden
+          >
+            <svg
+              class="theme-icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path
+                class="theme-moon"
+                d="M20.5 13.1A8.5 8.5 0 0 1 10.9 3.5 8.5 8.5 0 1 0 20.5 13.1Z"
+              />
+              <g class="theme-sun">
+                <circle cx="12" cy="12" r="4" />
+                <path
+                  d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"
+                />
+              </g>
+            </svg>
+            <span>Dark mode</span>
+          </button>
           <a class="button button-small button-dark" href="#your-project"
             >Find your fit <span aria-hidden="true">↗</span></a
           >
         </nav>
       </div>
     </header>
+
+    <dialog
+      class="mobile-navigation"
+      id="mobile-navigation"
+      aria-labelledby="mobile-navigation-title"
+    >
+      <div class="sidebar-heading">
+        <h2 id="mobile-navigation-title">Explore the grid.</h2>
+        <button
+          class="sidebar-close"
+          type="button"
+          data-menu-close
+          autofocus
+          aria-label="Close navigation"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+    </dialog>
 
     <main id="main">
       <section
