@@ -547,6 +547,9 @@ html.sidebar-open body {
 
 .menu-toggle {
   display: none;
+  width: 2.75rem;
+  flex-shrink: 0;
+  justify-content: center;
   min-height: 2.75rem;
   align-items: center;
   gap: 0.75rem;
@@ -562,6 +565,19 @@ html.sidebar-open body {
   width: 1rem;
   height: 0.75rem;
   border-block: 1.5px solid currentColor;
+}
+
+.menu-toggle-icon::before {
+  position: absolute;
+  top: 50%;
+  inset-inline: 0;
+  border-top: 1.5px solid currentColor;
+  content: '';
+  transform: translateY(-50%);
+}
+
+.menu-toggle[aria-expanded='true'] .menu-toggle-icon::before {
+  display: none;
 }
 
 .menu-toggle[aria-expanded='true'] .menu-toggle-icon {

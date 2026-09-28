@@ -106,7 +106,6 @@
     const header = document.querySelector('.site-header');
     if (!toggle || !navigation || !sidebar || !closeButton || !header) return;
 
-    const menuLabel = toggle.querySelector('[data-menu-label]');
     const mobileViewport = window.matchMedia('(max-width: 55.999rem)');
     const links = [...navigation.querySelectorAll('a[href^="#"]')];
     const navigationHome = navigation.parentElement;
@@ -114,7 +113,7 @@
 
     function syncMenuState() {
       toggle.setAttribute('aria-expanded', String(sidebar.open));
-      if (menuLabel) menuLabel.textContent = sidebar.open ? 'Close' : 'Menu';
+      toggle.setAttribute('aria-label', sidebar.open ? 'Close navigation' : 'Open navigation');
       document.documentElement.classList.toggle('sidebar-open', sidebar.open);
     }
 
