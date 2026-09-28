@@ -1,5 +1,9 @@
 # Form & Field | Website
 
+![HTML5](https://img.shields.io/badge/HTML5-%23fe4b01?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-%232196f2?style=for-the-badge&logo=css&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-yellow?style=for-the-badge&logo=javascript&logoColor=white)
+
 A Bento Grid website showcase by **Lance Ducante**, built to help potential clients explore this design style and find a direction for their own website.
 
 Built with standard HTML, CSS, and JavaScript. The visual identity combines forest green, orange, ivory, and lilac with locally hosted Bricolage Grotesque and Onest fonts.
