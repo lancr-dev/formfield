@@ -42,6 +42,50 @@
     );
   }
 
+  function initScrollReveal() {
+    const root = document.documentElement;
+    const targets = [
+      '.hero-grid > .tile',
+      '.about-layout > *',
+      '.principle-list > div',
+      '.section-heading',
+      '.concept-card',
+      '.playground-layout > *',
+      '.process-list > li',
+      '.project-panel > *',
+      '.faq > *',
+    ].join(',');
+    const items = [...document.querySelectorAll(targets)];
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (!items.length) return;
+
+    items.forEach((item, index) => {
+      item.classList.add('reveal-on-scroll');
+      item.style.setProperty('--reveal-delay', `${(index % 4) * 65}ms`);
+    });
+
+    if (reducedMotion.matches || !('IntersectionObserver' in window)) {
+      items.forEach((item) => item.classList.add('is-visible'));
+      root.setAttribute('data-motion-ready', '');
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, currentObserver) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add('is-visible');
+          currentObserver.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+    );
+
+    items.forEach((item) => observer.observe(item));
+    root.setAttribute('data-motion-ready', '');
+  }
+
   function initTheme() {
     const root = document.documentElement;
     const buttons = [...document.querySelectorAll('[data-theme-toggle]')];
@@ -322,6 +366,14 @@
       canvas.dataset.composition = direction.composition;
       canvas.dataset.palette = direction.palette;
 
+      if (announce) {
+        canvas.classList.remove('is-updating');
+        window.requestAnimationFrame(() => {
+          canvas.classList.add('is-updating');
+          window.setTimeout(() => canvas.classList.remove('is-updating'), 500);
+        });
+      }
+
       const description = `${compositionLabels.get(direction.composition)} composition · ${paletteLabels.get(direction.palette)} palette`;
       if (caption) caption.textContent = description;
       if (announce && status)
@@ -588,6 +640,7 @@
 
   initTheme();
   initNavigation();
+  initScrollReveal();
   initGallery();
   const syncBriefDirection = initProjectBrief();
   initPlayground(syncBriefDirection);

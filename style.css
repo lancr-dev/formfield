@@ -627,6 +627,27 @@ html.sidebar-open body {
   border-radius: var(--radius);
 }
 
+.reveal-on-scroll {
+  opacity: 1;
+  transform: none;
+}
+
+html.js[data-motion-ready] .reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(1.1rem) scale(0.985);
+  transition:
+    opacity 560ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 560ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+html.js[data-motion-ready] .reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
 .hero-anchor {
   display: flex;
   flex-direction: column;
@@ -1024,6 +1045,10 @@ html.sidebar-open body {
   padding: clamp(1rem, 2vw, 1.5rem);
   border: 1px solid var(--line);
   background: var(--surface);
+  transition:
+    transform 220ms ease-out,
+    border-color 220ms ease-out,
+    box-shadow 220ms ease-out;
 }
 
 .concept-preview {
@@ -1031,6 +1056,7 @@ html.sidebar-open body {
   padding: clamp(0.75rem, 2vw, 1.5rem);
   border-radius: var(--radius-small);
   container-type: inline-size;
+  transition: transform 260ms ease-out;
 }
 
 .mock-nav {
@@ -1572,6 +1598,33 @@ details > div {
   padding: clamp(1rem, 3.5cqi, 1.75rem);
   border-radius: var(--radius-small);
   color: var(--demo-ink);
+}
+
+.demo-grid.is-updating .demo-tile {
+  animation: playground-reflow 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.demo-grid.is-updating .demo-tile:nth-child(2) {
+  animation-delay: 35ms;
+}
+
+.demo-grid.is-updating .demo-tile:nth-child(3) {
+  animation-delay: 70ms;
+}
+
+.demo-grid.is-updating .demo-tile:nth-child(4) {
+  animation-delay: 105ms;
+}
+
+@keyframes playground-reflow {
+  from {
+    opacity: 0.55;
+    transform: translateY(0.5rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .demo-anchor {
@@ -2244,6 +2297,26 @@ details > div {
     background: var(--orange-light);
   }
 
+  .concept-card:hover,
+  .concept-card:focus-within {
+    transform: translateY(-4px);
+    border-color: var(--control-line);
+    box-shadow: 0 12px 28px rgb(25 44 36 / 9%);
+  }
+
+  .concept-card:hover .concept-preview,
+  .concept-card:focus-within .concept-preview {
+    transform: scale(0.99);
+  }
+
+  .hero-specimen .specimen-cell {
+    transition: transform 220ms ease-out;
+  }
+
+  .hero-specimen .specimen-cell:hover {
+    transform: translateY(-3px) rotate(-1deg);
+  }
+
   .hero-play-link:hover .circle-arrow {
     transform: rotate(45deg);
   }
@@ -2265,6 +2338,11 @@ details > div {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  html.js[data-motion-ready] .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
   }
 }
 

@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#183f32" />
+    <script>
+      document.documentElement.classList.add('js');
+      window.addEventListener('load', function () {
+        if (!document.documentElement.hasAttribute('data-motion-ready')) {
+          document.documentElement.classList.remove('js');
+        }
+      });
+    </script>
     <meta
       name="description"
       content="Meet the website with room for your whole story. Explore playful bento layouts, find your direction, and shape a brief for a custom website with Form &amp; Field."
