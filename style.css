@@ -116,20 +116,20 @@ h3 {
 
 h1 {
   font-size: clamp(3rem, 5.5vw, 5.1rem);
-  line-height: 1.04;
-  letter-spacing: -0.055em;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
 }
 
 h2 {
   font-size: clamp(2rem, 3.4vw, 3.25rem);
   line-height: 1.12;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.012em;
 }
 
 h3 {
   font-size: clamp(1.5rem, 2.3vw, 2rem);
   line-height: 1.2;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.008em;
 }
 
 h1 em,
@@ -137,7 +137,7 @@ h2 em,
 h3 em {
   color: var(--heading-accent);
   font-style: normal;
-  font-weight: 450;
+  font-weight: 600;
 }
 
 p {
@@ -202,11 +202,10 @@ button:disabled {
 }
 
 .eyebrow {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.5;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .section-heading {
@@ -469,7 +468,7 @@ html.sidebar-open body {
   font-size: clamp(1.45rem, 2.3vw, 1.8rem);
   font-weight: 750;
   line-height: 1;
-  letter-spacing: -0.065em;
+  letter-spacing: -0.02em;
   text-decoration: none;
 }
 
@@ -612,7 +611,6 @@ html.sidebar-open body {
 
 .section-kicker {
   margin-bottom: 1.25rem;
-  letter-spacing: 0.035em;
 }
 
 .bento-grid {
@@ -716,10 +714,6 @@ html.js[data-motion-ready] .reveal-on-scroll.is-visible {
   font-size: 0.875rem;
 }
 
-.specimen-heading > :last-child {
-  font-size: 1.75rem;
-}
-
 .specimen-grid {
   display: grid;
   flex: 1;
@@ -748,7 +742,7 @@ html.js[data-motion-ready] .reveal-on-scroll.is-visible {
   font-size: clamp(2.25rem, 4vw, 3.75rem);
   font-weight: 600;
   line-height: 1;
-  letter-spacing: -0.06em;
+  letter-spacing: -0.02em;
 }
 
 .specimen-asterisk {
@@ -782,7 +776,7 @@ html.js[data-motion-ready] .reveal-on-scroll.is-visible {
   font-size: clamp(2.75rem, 4.5vw, 4rem);
   font-weight: 500;
   line-height: 1;
-  letter-spacing: -0.09em;
+  letter-spacing: -0.01em;
 }
 
 .specimen-note {
@@ -914,7 +908,7 @@ html.js[data-motion-ready] .reveal-on-scroll.is-visible {
   font-size: clamp(1.75rem, 2.7vw, 2.5rem);
   font-weight: 600;
   line-height: 1.1;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.015em;
 }
 
 .hero-play-footer {
@@ -982,21 +976,12 @@ html.js[data-motion-ready] .reveal-on-scroll.is-visible {
 }
 
 .principle-list > div {
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
+  min-width: 0;
 }
 
 .principle-list dt {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
   margin-bottom: 0.75rem;
   font-weight: 600;
-}
-
-.principle-number {
-  font-size: 0.75rem;
-  font-variant-numeric: tabular-nums;
 }
 
 .principle-list dd {
@@ -1046,7 +1031,7 @@ html.js[data-motion-ready] .reveal-on-scroll.is-visible {
   border: 1px solid var(--line);
   background: var(--surface);
   transition:
-    transform 220ms ease-out,
+    translate 220ms ease-out,
     border-color 220ms ease-out,
     box-shadow 220ms ease-out;
 }
@@ -1334,13 +1319,6 @@ html.js[data-motion-ready] .reveal-on-scroll.is-visible {
   font-size: 0.6875rem;
 }
 
-.concept-index {
-  align-self: flex-start;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-variant-numeric: tabular-nums;
-}
-
 .concept-card > p {
   max-width: 55ch;
   margin-bottom: 1.25rem;
@@ -1418,12 +1396,6 @@ details > div {
   padding: 0;
   font-size: 0.875rem;
   font-weight: 600;
-}
-
-.control-fieldset legend > span {
-  margin-right: 0.5rem;
-  color: var(--muted);
-  font-size: 0.75rem;
 }
 
 .layout-options,
@@ -1638,16 +1610,17 @@ details > div {
 
 .demo-anchor .eyebrow,
 .demo-detail .eyebrow {
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
+}
+
+.demo-anchor .eyebrow {
+  color: inherit;
+  opacity: 0.75;
 }
 
 .demo-anchor h3 {
   font-size: clamp(1.75rem, 5cqi, 2.75rem);
   line-height: 1.08;
-}
-
-.demo-anchor h3 em {
-  color: var(--demo-soft);
 }
 
 .demo-anchor p {
@@ -1694,14 +1667,7 @@ details > div {
   font-family: var(--font-display);
   font-size: clamp(1.25rem, 3.8cqi, 2rem);
   line-height: 1.2;
-  letter-spacing: -0.04em;
-}
-
-.demo-detail > :last-child {
-  align-self: flex-end;
-  margin-top: auto;
-  font-size: 2.5rem;
-  line-height: 1;
+  letter-spacing: -0.01em;
 }
 
 .demo-note {
@@ -1746,20 +1712,9 @@ details > div {
 
 .process-list li {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 0.75rem 1.5rem;
-  padding-block: 2rem;
-  border-top: 1px solid var(--line);
-}
-
-.process-list li:last-child {
-  border-bottom: 1px solid var(--line);
-}
-
-.process-number {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-variant-numeric: tabular-nums;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.5rem;
+  padding-block: 1.75rem;
 }
 
 .process-list h3 {
@@ -1773,7 +1728,7 @@ details > div {
 }
 
 .process-deliverable {
-  grid-column: 2;
+  grid-column: 1;
   font-size: 0.75rem;
   font-weight: 500;
 }
@@ -1815,14 +1770,6 @@ details > div {
 .project-intro .project-note {
   color: #d4dfce;
   font-size: 0.875rem;
-}
-
-.project-flower {
-  margin-top: auto;
-  padding-top: 2rem;
-  color: var(--orange);
-  font-size: clamp(4rem, 7vw, 7rem);
-  line-height: 1;
 }
 
 .project-builder {
@@ -1997,7 +1944,6 @@ details > div {
   font-family: var(--font-display);
   font-size: 1.5rem;
   line-height: 1.25;
-  letter-spacing: -0.025em;
 }
 
 .footer-bottom {
@@ -2054,15 +2000,6 @@ details > div {
   .principle-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-
-  .principle-list dt {
-    display: block;
-  }
-
-  .principle-number {
-    display: block;
-    margin-bottom: 0.75rem;
-  }
 }
 
 @media (min-width: 56rem) {
@@ -2106,13 +2043,13 @@ details > div {
   }
 
   .process-list li {
-    grid-template-columns: minmax(2rem, 0.2fr) minmax(0, 2fr) minmax(0, 0.8fr);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 0.8fr);
     align-items: start;
     gap: 2rem;
   }
 
   .process-deliverable {
-    grid-column: auto;
+    grid-column: 2;
     justify-self: end;
     padding-top: 0.4rem;
     text-align: right;
@@ -2235,10 +2172,6 @@ details > div {
 }
 
 @media (max-width: 39.999rem) {
-  .edition-label {
-    display: none;
-  }
-
   .hero-anchor .eyebrow {
     max-width: 26ch;
   }
@@ -2299,7 +2232,7 @@ details > div {
 
   .concept-card:hover,
   .concept-card:focus-within {
-    transform: translateY(-4px);
+    translate: 0 -4px;
     border-color: var(--control-line);
     box-shadow: 0 12px 28px rgb(25 44 36 / 9%);
   }
